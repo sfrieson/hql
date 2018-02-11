@@ -125,3 +125,31 @@ venv.bak/
 pyvenv.cfg
 .venv
 pip-selfcheck.json
+
+
+
+
+*.pyc
+
+dist/
+build/
+*.egg-info/
+
+.tox/
+.coverage
+
+[tox]
+envlist=py26, py27, py33, py34, pypy, flake8
+
+[testenv]
+commands=py.test --cov hql {posargs}
+deps=
+    pytest
+    pytest-cov
+
+[testenv:flake8]
+basepython = python2.7
+deps =
+    flake8
+commands =
+    flake8 hql tests --max-line-length=120
