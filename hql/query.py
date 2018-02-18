@@ -29,15 +29,14 @@ def main(query, html):
         else:
             pieces[current].append(word)
 
-    limit = pieces['LIMIT'][0] or default_limit
-    offset = pieces['OFFSET'][0] or default_offset
+    limit = (len(pieces['LIMIT']) and pieces['LIMIT'][0]) or default_limit
+    offset = (len(pieces['OFFSET']) and pieces['OFFSET'][0]) or default_offset
     matches = find(soup, pieces['WHERE'])[offset:limit]
-    return values(matches)
+    return values(matches, pieces['SELECT'])
 
 
 def find(soup, params):
-    pass
+    return [el for el in soup.find_all() if getattr(el, params[0]) == params[2]]
 
-
-def values(soup, params):
-    pass
+def values(matches, params):
+    return matches
