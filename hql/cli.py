@@ -1,5 +1,5 @@
 import click
-import hql.data as data
+from hql import data, query
 
 import re
 
@@ -17,7 +17,7 @@ def main(url):
 
     user_input = ''
     while user_input != 'exit':
-        user_input = input('> ')
+        user_input = input('> ').strip()
 
         if user_input == 'help':
             print("""Commands:
@@ -45,4 +45,4 @@ url - to retrieve and set the current url
             else:
                 print('`url` only accepts 1 argument')
         elif re.match(r'^SELECT', user_input, flags=re.IGNORECASE):
-            print(user_input)
+            print(query.main(user_input, response))
