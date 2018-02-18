@@ -35,8 +35,29 @@ def main(query, html):
     return values(matches, pieces['SELECT'])
 
 
+"""
+Currently supports soup Tag attributes like:
+- attrs
+- children
+- contents
+- name
+- parent (?)
+- text
+"""
+
+
 def find(soup, params):
     return [el for el in soup.find_all() if getattr(el, params[0]) == params[2]]
 
+
+"""
+Currently supports the same list of Tag attributes above
+"""
+
+
 def values(matches, params):
-    return matches
+    selections = []
+    for el in matches:
+        selections.append([getattr(el, val) for val in params])
+
+    return selections
