@@ -47,7 +47,13 @@ Currently supports soup Tag attributes like:
 
 
 def find(soup, params):
-    return [el for el in soup.find_all() if getattr(el, params[0]) == params[2]]
+    found = []
+    for el in soup.find_all():
+        data = select(el, params[0])
+        if params[2] == data or params[2] in data:
+            found.append(el)
+
+    return found
 
 
 """
@@ -58,6 +64,19 @@ Currently supports the same list of Tag attributes above
 def values(matches, params):
     selections = []
     for el in matches:
-        selections.append([getattr(el, val) for val in params])
+        row = {}
+        for val in params:
+            row[val] = select(el, val) or ''
+        selections.append(row)
 
     return selections
+
+
+attribute_list = ['children', 'contents', 'name', 'parent', 'text']
+
+
+def select(element, prop):
+    if prop in attribute_list:
+        return getattr(element, prop)
+    else:
+        return element.get(prop, '')
