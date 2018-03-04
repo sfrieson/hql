@@ -15,6 +15,7 @@ def main(query, html):
     global default_limit
     global default_offset
     soup = BeautifulSoup(html, 'html.parser')
+
     pieces = {
         'SELECT': [],
         'WHERE': [],
@@ -23,11 +24,18 @@ def main(query, html):
     }
     current = ''
     split_query = query.split(' ')
+
+    print(split_query)
     for word in split_query:
+        print(word)
         if word.upper() in pieces:
+            print('it is a keyword')
             current = word.upper()
         else:
+            print('it is an input')
             pieces[current].append(word)
+
+    print(pieces)
 
     limit = (len(pieces['LIMIT']) and pieces['LIMIT'][0]) or default_limit
     offset = (len(pieces['OFFSET']) and pieces['OFFSET'][0]) or default_offset
@@ -47,13 +55,15 @@ Currently supports soup Tag attributes like:
 
 
 def find(soup, params):
-    found = []
-    for el in soup.find_all():
-        data = select(el, params[0])
-        if params[2] == data or params[2] in data:
-            found.append(el)
-
-    return found
+    if params:
+        found = []
+        for el in soup.find_all():
+            data = select(el, params[0])
+            if params[2] == data or params[2] in data:
+                found.append(el)
+        return found
+    else:
+        return [el for el in soup.find_all()]
 
 
 """
